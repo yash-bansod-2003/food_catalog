@@ -1,8 +1,8 @@
 import { Express } from "express";
 import { createServer } from "@/server";
-import configuration from "@/common/config/configuration";
-import logger from "@/common/config/logger";
-import { connectDatabase } from "@/common/config/connect-database";
+import configuration from "@/config/configuration";
+import logger from "@/config/logger";
+import { connectDatabase } from "@/config/connect-database";
 
 const port = configuration.port ? parseInt(configuration.port) : 5000;
 const host = configuration.host ?? "localhost";

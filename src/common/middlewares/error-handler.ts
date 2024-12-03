@@ -4,7 +4,7 @@ import { ZodError } from "zod";
 import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import zodErrorAdapter from "@/common/adapters/error/zod.adapter";
 import httpErrorAdapter from "@/common/adapters/error/http-error.adapter";
-import configuration from "@/common/config/configuration";
+import configuration from "@/config/configuration";
 export interface ErrorResponse {
   name: string;
   code: number;
