@@ -31,15 +31,20 @@ const attributesSchema = new mongoose.Schema<IAttribute>({
   availableOptions: { type: [String], required: true },
 });
 
-const categorySchema = new mongoose.Schema<ICategory>({
-  name: { type: String, required: true },
-  priceConfigurations: {
-    type: Map,
-    of: priceConfigurationsSchema,
-    required: true,
+const categorySchema = new mongoose.Schema<ICategory>(
+  {
+    name: { type: String, required: true },
+    priceConfigurations: {
+      type: Map,
+      of: priceConfigurationsSchema,
+      required: true,
+    },
+    attributes: { type: [attributesSchema], required: true },
   },
-  attributes: { type: [attributesSchema], required: true },
-});
+  {
+    timestamps: true,
+  },
+);
 
 const Category = mongoose.model<ICategory>(
   "Category",
