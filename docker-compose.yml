@@ -1,15 +1,15 @@
 version: "3"
 services:
-  postgres-database:
-    image: postgres:latest
-    container_name: postgres-food
+  mongodb-database:
+    image: mongo:latest
+    container_name: mongo-food
     ports:
-      - 5432:5432
+      - 27017:27017
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
     volumes:
-      - postgres-db:/var/lib/postgresql/data
+      - mongo-db:/data/db
 
 volumes:
-  postgres-db:
+  mongo-db:
