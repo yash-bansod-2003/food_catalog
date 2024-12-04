@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import CategoryService from "./service";
-import { ICategory } from "./model";
 import { Logger } from "winston";
 import createHttpError from "http-errors";
+import CategoryService from "./service.js";
+import { ICategory } from "./model.js";
 
 class CategoriesController {
   constructor(

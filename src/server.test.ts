@@ -1,11 +1,10 @@
 import supertest from "supertest";
-import { createServer } from "@/server";
-import { App } from "supertest/types";
+import { createServer } from "@/server.js";
 
 describe("server", () => {
   describe("get /status", () => {
     it("should returns status 200", async () => {
-      await supertest(createServer() as unknown as App)
+      await supertest(createServer())
         .get("/status")
         .expect(200)
         .then((res) => {
@@ -16,7 +15,7 @@ describe("server", () => {
 
   describe("get /message/:name", () => {
     it("should endpoint says hello", async () => {
-      await supertest(createServer() as unknown as App)
+      await supertest(createServer())
         .get("/message/john")
         .expect(200)
         .then((res) => {

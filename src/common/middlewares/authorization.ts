@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { AuthenticatedRequest } from "@/common/middlewares/authenticate";
+import { AuthenticatedRequest } from "@/common/middlewares/authenticate.js";
 
 const authorization = (roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {

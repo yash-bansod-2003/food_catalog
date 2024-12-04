@@ -1,7 +1,7 @@
 import { Request } from "express";
 import jwksClient from "jwks-rsa";
 import { expressjwt, GetVerificationKey } from "express-jwt";
-import configuration from "@/config/configuration";
+import configuration from "@/config/configuration.js";
 
 export default expressjwt({
   secret: jwksClient.expressJwtSecret({

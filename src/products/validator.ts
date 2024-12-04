@@ -1,7 +1,8 @@
-import { NextFunction, Request, Response } from "express";
 import { z } from "zod";
+import { NextFunction, Request, Response } from "express";
+import mongoose from "mongoose";
 
-export const categoryCreateValidator = (
+export const productCreateValidator = (
   req: Request,
   _res: Response,
   next: NextFunction,
@@ -9,19 +10,23 @@ export const categoryCreateValidator = (
   const validationSchema = z
     .object({
       name: z.string(),
+      discription: z.string(),
+      image: z.string(),
       priceConfigurations: z.record(
         z.object({
           priceType: z.enum(["base", "additional"]),
-          availableOptions: z.array(z.string()),
+          availableOptions: z.record(z.number()),
         }),
       ),
       attributes: z.array(
         z.object({
-          widgetType: z.enum(["switch", "radio"]),
-          defaultValue: z.string(),
-          availableOptions: z.array(z.string()),
+          name: z.string(),
+          value: z.string(),
         }),
       ),
+      restaurentId: z.string(),
+      categoryId: z.instanceof(mongoose.Types.ObjectId),
+      published: z.boolean(),
     })
     .strict();
   try {

@@ -2,8 +2,9 @@
    "name": "autentication",
    "version": "1.0.0",
    "main": "index.js",
+   "type": "module",
    "scripts": {
-      "dev": "cross-env NODE_ENV=development nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
+      "dev": "nodemon",
       "start": "cross-env NODE_ENV=production node ./dist/src/index.js",
       "build": "swc src --out-dir dist --ignore **/*.test.ts",
       "lint": "npx eslint ./src",

@@ -1,5 +1,5 @@
 import { ProjectionType, QueryOptions, RootFilterQuery, Types } from "mongoose";
-import { Category, ICategory } from "./model";
+import { Category, ICategory } from "./model.js";
 
 class CategoriesService {
   constructor(private readonly categoriesRepository: typeof Category) {

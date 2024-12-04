@@ -1,21 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import express, { Router } from "express";
-import CategoriesController from "@/categories/controller.js";
-import CategoriesService from "@/categories/service.js";
-import { Category } from "@/categories/model.js";
+import ProductsController from "@/products/controller.js";
+import ProductsService from "@/products/service.js";
+import { Product } from "@/products/model.js";
 import authenticate from "@/common/middlewares/authenticate.js";
 import authorization from "@/common/middlewares/authorization.js";
 import logger from "@/config/logger.js";
 import { ROLES } from "@/common/lib/constants.js";
-import { categoryCreateValidator } from "@/categories/validator.js";
+import { productCreateValidator } from "@/products/validator.js";
 
 const router = Router();
 
-const categoriesService = new CategoriesService(Category);
-const categoriesController = new CategoriesController(
-  categoriesService,
-  logger,
-);
+const productsService = new ProductsService(Product);
+const productsController = new ProductsController(productsService, logger);
 
 router.post(
   "/",
@@ -24,8 +21,8 @@ router.post(
     ROLES.ADMIN,
     ROLES.MANAGER,
   ]) as unknown as express.RequestHandler,
-  categoryCreateValidator,
-  categoriesController.create.bind(categoriesController),
+  productCreateValidator,
+  productsController.create.bind(productsController),
 );
 
 router.get(
@@ -35,7 +32,7 @@ router.get(
     ROLES.ADMIN,
     ROLES.MANAGER,
   ]) as unknown as express.RequestHandler,
-  categoriesController.findAll.bind(categoriesController),
+  productsController.findAll.bind(productsController),
 );
 
 router.get(
@@ -45,7 +42,7 @@ router.get(
     ROLES.ADMIN,
     ROLES.MANAGER,
   ]) as unknown as express.RequestHandler,
-  categoriesController.findOne.bind(categoriesController),
+  productsController.findOne.bind(productsController),
 );
 
 router.put(
@@ -55,7 +52,7 @@ router.put(
     ROLES.ADMIN,
     ROLES.MANAGER,
   ]) as unknown as express.RequestHandler,
-  categoriesController.update.bind(categoriesController),
+  productsController.update.bind(productsController),
 );
 
 router.delete(
@@ -65,7 +62,7 @@ router.delete(
     ROLES.ADMIN,
     ROLES.MANAGER,
   ]) as unknown as express.RequestHandler,
-  categoriesController.delete.bind(categoriesController),
+  productsController.delete.bind(productsController),
 );
 
 export default router;
