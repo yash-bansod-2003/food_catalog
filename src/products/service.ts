@@ -1,5 +1,5 @@
 import { ProjectionType, QueryOptions, RootFilterQuery, Types } from "mongoose";
-import { Product, IProduct } from "./model";
+import { Product, IProduct } from "./model.js";
 
 class ProductsService {
   constructor(private readonly productsRepository: typeof Product) {

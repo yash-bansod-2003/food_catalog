@@ -1,11 +1,12 @@
-import express, { Express } from "express";
+import express, { Application } from "express";
 import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
-import errorHandler from "@/common/middlewares/error-handler";
-import categoriesRouter from "@/categories/router";
+import errorHandler from "@/common/middlewares/error-handler.js";
+import categoriesRouter from "@/categories/router.js";
+import productsRouter from "@/products/router.js";
 
-export const createServer = (): Express => {
+export const createServer = (): Application => {
   const app = express();
   app
     .use(cors({ origin: ["http://localhost:5173"], credentials: true }))
@@ -21,6 +22,7 @@ export const createServer = (): Express => {
       res.json({ message: `hello ${req.params.name}` });
     })
     .use("/categories", categoriesRouter)
-    .use(errorHandler);
+    .use("/products", productsRouter)
+    .use(errorHandler as unknown as express.ErrorRequestHandler);
   return app;
 };

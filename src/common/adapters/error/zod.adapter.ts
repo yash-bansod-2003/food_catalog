@@ -1,5 +1,5 @@
 import { ZodError } from "zod";
-import { ErrorResponse } from "@/common/middlewares/error-handler";
+import { ErrorResponse } from "@/common/middlewares/error-handler.js";
 
 const zodErrorAdapter = (error: ZodError): ErrorResponse => {
   return {

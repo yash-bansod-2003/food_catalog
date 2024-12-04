@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import ProductService from "./service";
-import { IProduct } from "./model";
-import { Logger } from "winston";
 import createHttpError from "http-errors";
+import { Logger } from "winston";
+import ProductService from "./service.js";
+import { IProduct } from "./model.js";
 
 class ProductsController {
   constructor(

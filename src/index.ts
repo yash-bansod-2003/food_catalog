@@ -1,12 +1,12 @@
-import { Express } from "express";
-import { createServer } from "@/server";
-import configuration from "@/config/configuration";
-import logger from "@/config/logger";
-import { connectDatabase } from "@/config/connect-database";
+import { Application } from "express";
+import { createServer } from "@/server.js";
+import configuration from "@/config/configuration.js";
+import logger from "@/config/logger.js";
+import { connectDatabase } from "@/config/connect-database.js";
 
 const port = configuration.port ? parseInt(configuration.port) : 5000;
 const host = configuration.host ?? "localhost";
-const server: Express = createServer();
+const server: Application = createServer();
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 server.listen(port, host, async () => {

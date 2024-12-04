@@ -1,13 +1,13 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
-import { Router } from "express";
-import CategoriesController from "@/categories/controller";
-import CategoriesService from "@/categories/service";
-import { Category } from "@/categories/model";
-import authenticate from "@/common/middlewares/authenticate";
-import authorization from "@/common/middlewares/authorization";
-import logger from "@/config/logger";
-import { ROLES } from "@/common/lib/constants";
-import { categoryCreateValidator } from "@/categories/validator";
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+import express, { Router } from "express";
+import CategoriesController from "@/categories/controller.js";
+import CategoriesService from "@/categories/service.js";
+import { Category } from "@/categories/model.js";
+import authenticate from "@/common/middlewares/authenticate.js";
+import authorization from "@/common/middlewares/authorization.js";
+import logger from "@/config/logger.js";
+import { ROLES } from "@/common/lib/constants.js";
+import { categoryCreateValidator } from "@/categories/validator.js";
 
 const router = Router();
 
@@ -19,37 +19,52 @@ const categoriesController = new CategoriesController(
 
 router.post(
   "/",
-  authenticate,
-  authorization([ROLES.ADMIN, ROLES.MANAGER]),
+  authenticate as unknown as express.RequestHandler,
+  authorization([
+    ROLES.ADMIN,
+    ROLES.MANAGER,
+  ]) as unknown as express.RequestHandler,
   categoryCreateValidator,
   categoriesController.create.bind(categoriesController),
 );
 
 router.get(
   "/",
-  authenticate,
-  authorization([ROLES.ADMIN, ROLES.MANAGER]),
+  authenticate as unknown as express.RequestHandler,
+  authorization([
+    ROLES.ADMIN,
+    ROLES.MANAGER,
+  ]) as unknown as express.RequestHandler,
   categoriesController.findAll.bind(categoriesController),
 );
 
 router.get(
   "/:id",
-  authenticate,
-  authorization([ROLES.ADMIN, ROLES.MANAGER]),
+  authenticate as unknown as express.RequestHandler,
+  authorization([
+    ROLES.ADMIN,
+    ROLES.MANAGER,
+  ]) as unknown as express.RequestHandler,
   categoriesController.findOne.bind(categoriesController),
 );
 
 router.put(
   "/:id",
-  authenticate,
-  authorization([ROLES.ADMIN, ROLES.MANAGER]),
+  authenticate as unknown as express.RequestHandler,
+  authorization([
+    ROLES.ADMIN,
+    ROLES.MANAGER,
+  ]) as unknown as express.RequestHandler,
   categoriesController.update.bind(categoriesController),
 );
 
 router.delete(
   "/:id",
-  authenticate,
-  authorization([ROLES.ADMIN, ROLES.MANAGER]),
+  authenticate as unknown as express.RequestHandler,
+  authorization([
+    ROLES.ADMIN,
+    ROLES.MANAGER,
+  ]) as unknown as express.RequestHandler,
   categoriesController.delete.bind(categoriesController),
 );
 
