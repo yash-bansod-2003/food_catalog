@@ -1,0 +1,66 @@
+meta {
+  name: Create
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:5002/categories
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Pizza",
+    "priceConfigurations": {
+      "size": {
+        "priceType": "base",
+        "availableOptions": [
+          "Small",
+          "Medium",
+          "Large"
+        ]
+      },
+      "crust": {
+        "priceType": "additional",
+        "availableOptions": [
+          "Thin",
+          "Thick",
+          "Stuffed"
+        ]
+      },
+      "extraCheese": {
+        "priceType": "additional",
+        "availableOptions": [
+          "Yes",
+          "No"
+        ]
+      }
+    },
+    "attributes": [
+      {
+        "name": "Toppings",
+        "widgetType": "radio",
+        "defaultValue": "Pepperoni",
+        "availableOptions": [
+          "Pepperoni",
+          "Mushrooms",
+          "Onions",
+          "Sausage",
+          "Bacon"
+        ]
+      },
+      {
+        "name": "Sauce",
+        "widgetType": "switch",
+        "defaultValue": "Tomato",
+        "availableOptions": [
+          "Tomato",
+          "Alfredo",
+          "Pesto"
+        ]
+      }
+    ]
+  }
+}

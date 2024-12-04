@@ -1,0 +1,27 @@
+meta {
+  name: Delete
+  type: http
+  seq: 5
+}
+
+delete {
+  url: http://localhost:5002/categories/67501cd5fa346c4b773b729c
+  body: none
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Pizza Updated",
+    "priceConfigurations": {
+      "size": {
+        "priceType": "base",
+        "availableOptions": [
+          "Small",
+          "Medium Updated",
+          "Large"
+        ]
+      }
+    }
+  }
+}
