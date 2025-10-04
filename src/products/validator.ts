@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { NextFunction, Request, Response } from "express";
-import mongoose from "mongoose";
 
 export const productCreateValidator = (
   req: Request,
@@ -15,17 +14,17 @@ export const productCreateValidator = (
       priceConfigurations: z.record(
         z.object({
           priceType: z.enum(["base", "additional"]),
-          availableOptions: z.record(z.number()),
+          availableOptions: z.record(z.string(), z.number()),
         }),
       ),
       attributes: z.array(
         z.object({
           name: z.string(),
-          value: z.string(),
+          value: z.union([z.string(), z.boolean(), z.number()]),
         }),
       ),
-      restaurentId: z.string(),
-      categoryId: z.instanceof(mongoose.Types.ObjectId),
+      restaurentId: z.number(),
+      categoryId: z.string(),
       published: z.boolean(),
     })
     .strict();

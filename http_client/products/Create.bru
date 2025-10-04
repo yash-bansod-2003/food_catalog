@@ -1,0 +1,49 @@
+meta {
+  name: Create
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:5002/products
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Panir Pizza",
+    "discription": "The best panir pizza ever",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMLcSuD90kLgpleS7QnT0wSGgCvl30Tdhdh7y_LZCO0VqXlZkq3z6vRDdsCXGreogJDO8&usqp=CAU",
+    "restaurentId" : 1,
+    "categoryId" : "68e17eb31cc4ead188cb8906",
+    "published" : true,
+    "priceConfigurations": {
+      "size": {
+        "priceType": "base",
+        "availableOptions": {
+          "Small": 400,
+          "Medium": 600,
+          "Large": 800
+        }
+      },
+      "crust": {
+        "priceType": "additional",
+        "availableOptions": {
+          "Thin": 50,
+          "Thick": 100
+        }
+      }
+    },
+    "attributes": [
+      {
+        "name": "Is Hit",
+        "value": true
+      },
+      {
+        "name": "Spiciness",
+        "value": "Hot"
+      }
+    ]
+  }
+}

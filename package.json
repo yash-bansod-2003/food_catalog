@@ -4,7 +4,7 @@
    "main": "index.js",
    "type": "module",
    "scripts": {
-      "dev": "nodemon",
+      "dev": "cross-env NODE_ENV=development nodemon --exec tsx -r tsconfig-paths/register src/index.ts",
       "start": "cross-env NODE_ENV=production node ./dist/src/index.js",
       "build": "swc src --out-dir dist --ignore **/*.test.ts",
       "lint": "npx eslint ./src",
@@ -27,6 +27,7 @@
       "@types/cors": "^2.8.17",
       "@types/eslint__js": "^8.42.3",
       "@types/express": "^5.0.0",
+      "@types/http-errors": "^2.0.5",
       "@types/jest": "^29.5.14",
       "@types/jsonwebtoken": "^9.0.7",
       "@types/morgan": "^1.9.9",
@@ -59,6 +60,7 @@
       "jwks-rsa": "^3.1.0",
       "mongoose": "^8.8.3",
       "morgan": "^1.10.0",
+      "tsx": "^4.20.6",
       "winston": "^3.17.0",
       "zod": "^3.23.8"
    }
