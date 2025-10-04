@@ -7,12 +7,21 @@ import authenticate from "@/common/middlewares/authenticate.js";
 import authorization from "@/common/middlewares/authorization.js";
 import logger from "@/config/logger.js";
 import { ROLES } from "@/common/lib/constants.js";
-import { productCreateValidator } from "@/products/validator.js";
+import S3Storage from "@/common/services/s3Storage.js";
+import {
+  productCreateValidator,
+  getPresignedUrlValidator,
+} from "@/products/validator.js";
 
 const router = Router();
 
 const productsService = new ProductsService(Product);
-const productsController = new ProductsController(productsService, logger);
+const storageService = new S3Storage();
+const productsController = new ProductsController(
+  productsService,
+  storageService,
+  logger,
+);
 
 router.post(
   "/",
@@ -23,6 +32,12 @@ router.post(
   ]) as unknown as express.RequestHandler,
   productCreateValidator,
   productsController.create.bind(productsController),
+);
+
+router.post(
+  "/get-presigned-url",
+  getPresignedUrlValidator,
+  productsController.getPresignedUrl.bind(productsController),
 );
 
 router.get(

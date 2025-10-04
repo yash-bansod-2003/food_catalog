@@ -37,3 +37,24 @@ export const productCreateValidator = (
     return;
   }
 };
+
+export const getPresignedUrlValidator = (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) => {
+  const validationSchema = z
+    .object({
+      fileName: z.string(),
+      mimeType: z.string().optional(),
+    })
+    .strict();
+  try {
+    validationSchema.parse(req.query);
+    next();
+    return;
+  } catch (error) {
+    next(error);
+    return;
+  }
+};
