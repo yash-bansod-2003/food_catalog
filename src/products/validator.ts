@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { NextFunction, Request, Response } from "express";
-import mongoose from "mongoose";
 
 export const productCreateValidator = (
   req: Request,
@@ -15,22 +14,43 @@ export const productCreateValidator = (
       priceConfigurations: z.record(
         z.object({
           priceType: z.enum(["base", "additional"]),
-          availableOptions: z.record(z.number()),
+          availableOptions: z.record(z.string(), z.number()),
         }),
       ),
       attributes: z.array(
         z.object({
           name: z.string(),
-          value: z.string(),
+          value: z.union([z.string(), z.boolean(), z.number()]),
         }),
       ),
-      restaurentId: z.string(),
-      categoryId: z.instanceof(mongoose.Types.ObjectId),
+      restaurentId: z.number(),
+      categoryId: z.string(),
       published: z.boolean(),
     })
     .strict();
   try {
     validationSchema.parse(req.body);
+    next();
+    return;
+  } catch (error) {
+    next(error);
+    return;
+  }
+};
+
+export const getPresignedUrlValidator = (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) => {
+  const validationSchema = z
+    .object({
+      fileName: z.string(),
+      mimeType: z.string().optional(),
+    })
+    .strict();
+  try {
+    validationSchema.parse(req.query);
     next();
     return;
   } catch (error) {

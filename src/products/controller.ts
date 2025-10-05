@@ -3,10 +3,13 @@ import createHttpError from "http-errors";
 import { Logger } from "winston";
 import ProductService from "./service.js";
 import { IProduct } from "./model.js";
+import { FileStorage } from "@/common/types/storage.js";
+import { v4 as uuid } from "uuid";
 
 class ProductsController {
   constructor(
     private readonly productService: ProductService,
+    private readonly storageService: FileStorage,
     private readonly logger: Logger,
   ) {}
 
@@ -35,6 +38,26 @@ class ProductsController {
       this.logger.error(`Error creating product: ${(error as Error).message}`);
       next(createHttpError(500, "internal server error"));
       return;
+    }
+  }
+
+  async getPresignedUrl(req: Request, res: Response, next: NextFunction) {
+    this.logger.info("Generating presigned URL for product image upload");
+    try {
+      const { fileName } = req.body as { fileName: string };
+      const fileExtension = fileName.split(".").pop();
+      const uniqueFileName = `${uuid()}.${fileExtension}`;
+      this.logger.info(`Generated unique file name: ${uniqueFileName}`);
+      const presignedUrl = await this.storageService.getPresignedUrl({
+        fileName: uniqueFileName,
+      });
+      this.logger.info("Presigned URL generated successfully");
+      res.json({ url: presignedUrl, fileName: uniqueFileName });
+    } catch (error) {
+      this.logger.error(
+        `Error generating presigned URL: ${(error as Error).message}`,
+      );
+      next(createHttpError(500, "internal server error"));
     }
   }
 

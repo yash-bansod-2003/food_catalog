@@ -84,7 +84,7 @@ class CategoriesController {
 
     if (!category) {
       this.logger.error(`Category with id: ${req.params.id} not found`);
-      return next(createHttpError(400, "restaurant not found"));
+      return next(createHttpError(400, "category not found"));
     }
 
     try {
