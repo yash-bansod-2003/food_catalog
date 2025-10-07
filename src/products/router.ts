@@ -12,14 +12,17 @@ import {
   productCreateValidator,
   getPresignedUrlValidator,
 } from "@/products/validator.js";
+import { createMessageBrokerFactory } from "@/common/factories/brokerFactory.js";
 
 const router = Router();
 
 const productsService = new ProductsService(Product);
 const storageService = new S3Storage();
+const messageBroker = createMessageBrokerFactory();
 const productsController = new ProductsController(
   productsService,
   storageService,
+  messageBroker,
   logger,
 );
 

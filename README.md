@@ -1,6 +1,6 @@
-# Food
+# Food Catalog
 
-This is a repository for the Authentication service of a Food Delivery web application, built using a microservices architecture. The application is designed to be scalable and fault-tolerant, with a focus on providing a seamless user experience.
+This is a repository for the Catalog service of a Food Delivery web application, built using a microservices architecture. The application is designed to be scalable and fault-tolerant, with a focus on providing a seamless user experience.
 
 ## Setup Installation
 

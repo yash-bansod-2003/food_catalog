@@ -5,11 +5,13 @@ import ProductService from "./service.js";
 import { IProduct } from "./model.js";
 import { FileStorage } from "@/common/types/storage.js";
 import { v4 as uuid } from "uuid";
+import { MessageBroker } from "@/common/types/broker.js";
 
 class ProductsController {
   constructor(
     private readonly productService: ProductService,
     private readonly storageService: FileStorage,
+    private readonly messageBroker: MessageBroker,
     private readonly logger: Logger,
   ) {}
 

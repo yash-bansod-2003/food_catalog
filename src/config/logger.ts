@@ -3,7 +3,7 @@ import configuration from "@/config/configuration.js";
 
 const logger = createLogger({
   level: "info",
-  defaultMeta: { serviceName: "templete" },
+  defaultMeta: { serviceName: "catalog-service" },
   transports: [
     new transports.Console({
       level: "info",
