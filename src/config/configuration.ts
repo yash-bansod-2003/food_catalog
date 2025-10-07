@@ -15,6 +15,12 @@ const configuration = {
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   },
+  kafka: {
+    clientId: process.env.KAFKA_CLIENT_ID || "catalog-service",
+    brokers: process.env.KAFKA_BROKERS
+      ? process.env.KAFKA_BROKERS.split(",")
+      : ["localhost:9092"],
+  },
 };
 
 export default configuration;
