@@ -38,6 +38,12 @@ export const productCreateValidator = (
   }
 };
 
+export const productQueryValidationSchema = z.object({
+  page: z.number().optional(),
+  per_page: z.number().optional(),
+  search: z.string().optional(),
+});
+
 export const getPresignedUrlValidator = (
   req: Request,
   _res: Response,
@@ -51,6 +57,7 @@ export const getPresignedUrlValidator = (
     .strict();
   try {
     validationSchema.parse(req.query);
+    productQueryValidationSchema.parse(req.body);
     next();
     return;
   } catch (error) {

@@ -3,6 +3,9 @@ import { Logger } from "winston";
 import createHttpError from "http-errors";
 import CategoryService from "./service.js";
 import { ICategory } from "./model.js";
+import { ResponseWithMetadata } from "../common/types/index.js";
+import { categoryQueryValidationSchema } from "./validator.js";
+import { z } from "zod";
 
 class CategoriesController {
   constructor(
@@ -31,7 +34,11 @@ class CategoriesController {
     try {
       const category = await this.categoryService.create(createCategoryDto);
       this.logger.info(`Category created with id: ${String(category._id)}`);
-      res.json({ id: category._id });
+      const response: ResponseWithMetadata<{ id: string }> = {
+        data: { id: String(category._id) },
+        success: true,
+      };
+      res.json(response);
       return;
     } catch (error) {
       this.logger.error(`Error creating category: ${(error as Error).message}`);
@@ -43,9 +50,28 @@ class CategoriesController {
   async findAll(req: Request, res: Response, next: NextFunction) {
     this.logger.info("Fetching all categories");
     try {
-      const categories = await this.categoryService.findAll(req.query);
+      const query = req.query as unknown as z.infer<
+        typeof categoryQueryValidationSchema
+      >;
+      const page = query.page ? Number(query.page) : 1;
+      const per_page = query.per_page ? Number(query.per_page) : 10;
+
+      const categories = await this.categoryService.findAll(null, {
+        skip: (page - 1) * per_page,
+        limit: per_page,
+      });
+
       this.logger.info(`Fetched ${categories.length} categories`);
-      return res.json(categories);
+      const response: ResponseWithMetadata<ICategory[]> = {
+        data: categories,
+        success: true,
+        meta: {
+          total: categories.length,
+          page,
+          per_page,
+        },
+      };
+      return res.json(response);
     } catch (error) {
       this.logger.error(
         `Error fetching all categories: ${(error as Error).message}`,
@@ -65,7 +91,12 @@ class CategoriesController {
         return next(createHttpError(404, "category not found"));
       }
       this.logger.info(`Fetched category with id: ${String(category._id)}`);
-      res.json(category);
+      const response: ResponseWithMetadata<ICategory> = {
+        data: category,
+        success: true,
+      };
+      res.json(response);
+      return;
     } catch (error) {
       this.logger.error(
         `Error fetching category with id: ${req.params.id}: ${(error as Error).message}`,

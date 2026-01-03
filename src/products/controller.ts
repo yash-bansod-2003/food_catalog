@@ -6,6 +6,9 @@ import { IProduct } from "./model.js";
 import { FileStorage } from "@/common/types/storage.js";
 import { v4 as uuid } from "uuid";
 import { MessageBroker } from "@/common/types/broker.js";
+import { ResponseWithMetadata } from "../common/types/index.js";
+import { productQueryValidationSchema } from "./validator.js";
+import { z } from "zod";
 
 class ProductsController {
   constructor(
@@ -66,9 +69,24 @@ class ProductsController {
   async findAll(req: Request, res: Response, next: NextFunction) {
     this.logger.info("Fetching all products");
     try {
+      const query = req.query as unknown as z.infer<
+        typeof productQueryValidationSchema
+      >;
+      const page = query.page ? Number(query.page) : 1;
+      const per_page = query.per_page ? Number(query.per_page) : 10;
       const products = await this.productService.findAll(req.query);
       this.logger.info(`Fetched ${products.length} products`);
-      return res.json(products);
+
+      const response: ResponseWithMetadata<IProduct[]> = {
+        data: products,
+        success: true,
+        meta: {
+          total: products.length,
+          page,
+          per_page,
+        },
+      };
+      return res.json(response);
     } catch (error) {
       this.logger.error(
         `Error fetching all products: ${(error as Error).message}`,
@@ -87,8 +105,12 @@ class ProductsController {
         this.logger.error(`Product with id: ${req.params.id} not found`);
         return next(createHttpError(404, "product not found"));
       }
+      const response: ResponseWithMetadata<IProduct> = {
+        data: product,
+        success: true,
+      };
       this.logger.info(`Fetched product with id: ${String(product._id)}`);
-      res.json(product);
+      res.json(response);
     } catch (error) {
       this.logger.error(
         `Error fetching product with id: ${req.params.id}: ${(error as Error).message}`,
@@ -116,7 +138,12 @@ class ProductsController {
         updateProductDto,
       );
       this.logger.info(`Product with id: ${req.params.id} updated`);
-      res.json(product);
+      const response: ResponseWithMetadata<IProduct> = {
+        data: product,
+        success: true,
+      };
+      res.json(response);
+      return;
     } catch (error) {
       this.logger.error(
         `Error updating product with id: ${req.params.id}: ${(error as Error).message}`,
@@ -140,8 +167,12 @@ class ProductsController {
       const deletedProduct = await this.productService.delete({
         _id: req.params.id,
       });
+      const response: ResponseWithMetadata<IProduct> = {
+        data: deletedProduct,
+        success: true,
+      };
       this.logger.info(`Product with id: ${req.params.id} deleted`);
-      return res.json(deletedProduct);
+      return res.json(response);
     } catch (error) {
       this.logger.error(
         `Error deleting product with id: ${req.params.id}: ${(error as Error).message}`,

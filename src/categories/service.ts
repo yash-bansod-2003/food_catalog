@@ -22,8 +22,9 @@ class CategoriesService {
 
   public async findAll(
     filter: RootFilterQuery<ICategory>,
+    options?: QueryOptions<ICategory>,
   ): Promise<ICategory[]> {
-    return await this.categoriesRepository.find(filter);
+    return await this.categoriesRepository.find(filter, null, options).exec();
   }
 
   public async update(
