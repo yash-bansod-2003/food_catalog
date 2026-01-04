@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import errorHandler from "@/common/middlewares/error-handler.js";
 import categoriesRouter from "@/categories/router.js";
 import productsRouter from "@/products/router.js";
+import toppingsRouter from "@/toppings/router.js";
 
 export const createServer = (): Application => {
   const app = express();
@@ -23,6 +24,7 @@ export const createServer = (): Application => {
     })
     .use("/categories", categoriesRouter)
     .use("/products", productsRouter)
+    .use("/toppings", toppingsRouter)
     .use(errorHandler as unknown as express.ErrorRequestHandler);
   return app;
 };
