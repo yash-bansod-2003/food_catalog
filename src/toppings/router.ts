@@ -8,11 +8,18 @@ import authorization from "@/common/middlewares/authorization.js";
 import logger from "@/config/logger.js";
 import { ROLES } from "@/common/lib/constants.js";
 import { toppingCreateValidator } from "@/toppings/validator.js";
+import { createMessageBrokerFactory } from "@/common/factories/brokerFactory.js";
 
 const router = Router();
 
 const toppingsService = new ToppingsService(Topping);
-const toppingsController = new ToppingsController(toppingsService, logger);
+const messageBroker = createMessageBrokerFactory();
+
+const toppingsController = new ToppingsController(
+  toppingsService,
+  messageBroker,
+  logger,
+);
 
 router.post(
   "/",

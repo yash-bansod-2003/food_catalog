@@ -6,10 +6,12 @@ import { ITopping } from "./model.js";
 import { ResponseWithMetadata } from "../common/types/index.js";
 import { toppingQueryValidationSchema } from "./validator.js";
 import { z } from "zod";
+import { MessageBroker } from "@/common/types/broker.js";
 
 class ToppingsController {
   constructor(
     private readonly toppingsService: ToppingsService,
+    private readonly messageBroker: MessageBroker,
     private readonly logger: Logger,
   ) {}
 
@@ -36,6 +38,10 @@ class ToppingsController {
         data: { id: String(created._id) },
         success: true,
       };
+      await this.messageBroker.sendMessage(
+        "toppings-topic",
+        JSON.stringify(created),
+      );
       res.json(response);
       return;
     } catch (error) {
@@ -122,6 +128,10 @@ class ToppingsController {
         updateToppingDto,
       );
       this.logger.info(`Topping with id: ${req.params.id} updated`);
+      await this.messageBroker.sendMessage(
+        "toppings-topic",
+        JSON.stringify(updated),
+      );
       res.json(updated);
     } catch (error) {
       this.logger.error(
