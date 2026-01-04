@@ -1,0 +1,27 @@
+meta {
+  name: Update
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:5002/toppings/695a2ad3b97d09e4696a46e2
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Pizza",
+    "priceConfigurations": {
+      "size": {
+        "priceType": "base",
+        "availableOptions": [
+          "Small",
+          "Medium Updated",
+          "Large"
+        ]
+      }
+    }
+  }
+}

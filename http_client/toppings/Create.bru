@@ -1,0 +1,20 @@
+meta {
+  name: Create
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:5002/toppings
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Pizza",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQj0mNj5croCoUPQFMkd9eHeyzR9JvGey8AuQ&s",
+    "price": 50,
+    "restaurantId": 1
+  }
+}

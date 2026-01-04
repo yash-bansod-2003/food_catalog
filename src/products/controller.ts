@@ -36,6 +36,15 @@ class ProductsController {
 
     try {
       const product = await this.productService.create(createProductDto);
+      if (!product) {
+        this.logger.error(`Product creation failed`);
+        next(createHttpError(500, "internal server error"));
+        return;
+      }
+      await this.messageBroker.sendMessage(
+        "product-topic",
+        JSON.stringify(product),
+      );
       this.logger.info(`Product created with id: ${String(product._id)}`);
       res.json({ id: product._id });
       return;
@@ -138,6 +147,11 @@ class ProductsController {
         updateProductDto,
       );
       this.logger.info(`Product with id: ${req.params.id} updated`);
+
+      await this.messageBroker.sendMessage(
+        "product-topic",
+        JSON.stringify(product),
+      );
       const response: ResponseWithMetadata<IProduct> = {
         data: product,
         success: true,
@@ -167,6 +181,12 @@ class ProductsController {
       const deletedProduct = await this.productService.delete({
         _id: req.params.id,
       });
+
+      await this.messageBroker.sendMessage(
+        "product-topic",
+        JSON.stringify(product),
+      );
+
       const response: ResponseWithMetadata<IProduct> = {
         data: deletedProduct,
         success: true,
