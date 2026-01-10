@@ -5,7 +5,7 @@ import ProductService from "./service.js";
 import { IProduct } from "./model.js";
 import { FileStorage } from "@/common/types/storage.js";
 import { v4 as uuid } from "uuid";
-import { MessageBroker } from "@/common/types/broker.js";
+import { MessageBroker, MessageBrokerEvent } from "@/common/types/broker.js";
 import { ResponseWithMetadata } from "../common/types/index.js";
 import { productQueryValidationSchema } from "./validator.js";
 import { z } from "zod";
@@ -41,9 +41,21 @@ class ProductsController {
         next(createHttpError(500, "internal server error"));
         return;
       }
+      const messageBrokerEvent: MessageBrokerEvent = {
+        event_id: uuid(),
+        event_type: "product.created",
+        event_version: "1.0",
+        occurred_at: new Date().toISOString(),
+        producer: {
+          service: "catalog-service",
+          version: "1.0.0",
+        },
+        partition_key: String(product._id),
+        data: product,
+      };
       await this.messageBroker.sendMessage(
         "product-topic",
-        JSON.stringify(product),
+        JSON.stringify(messageBrokerEvent),
       );
       this.logger.info(`Product created with id: ${String(product._id)}`);
       res.json({ id: product._id });
@@ -148,9 +160,22 @@ class ProductsController {
       );
       this.logger.info(`Product with id: ${req.params.id} updated`);
 
+      const messageBrokerEvent: MessageBrokerEvent = {
+        event_id: uuid(),
+        event_type: "product.updated",
+        event_version: "1.0",
+        occurred_at: new Date().toISOString(),
+        producer: {
+          service: "catalog-service",
+          version: "1.0.0",
+        },
+        partition_key: String(product.name),
+        data: product,
+      };
+
       await this.messageBroker.sendMessage(
         "product-topic",
-        JSON.stringify(product),
+        JSON.stringify(messageBrokerEvent),
       );
       const response: ResponseWithMetadata<IProduct> = {
         data: product,
@@ -182,9 +207,22 @@ class ProductsController {
         _id: req.params.id,
       });
 
+      const messageBrokerEvent: MessageBrokerEvent = {
+        event_id: uuid(),
+        event_type: "product.deleted",
+        event_version: "1.0",
+        occurred_at: new Date().toISOString(),
+        producer: {
+          service: "catalog-service",
+          version: "1.0.0",
+        },
+        partition_key: String(product.name),
+        data: product,
+      };
+
       await this.messageBroker.sendMessage(
         "product-topic",
-        JSON.stringify(product),
+        JSON.stringify(messageBrokerEvent),
       );
 
       const response: ResponseWithMetadata<IProduct> = {

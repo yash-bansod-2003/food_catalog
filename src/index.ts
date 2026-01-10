@@ -5,7 +5,7 @@ import logger from "@/config/logger.js";
 import { connectDatabase } from "@/config/connect-database.js";
 import { createMessageBrokerFactory } from "./common/factories/brokerFactory.js";
 
-const port = configuration.port ? parseInt(configuration.port) : 5000;
+const port = configuration.port ? Number.parseInt(configuration.port) : 5000;
 const host = configuration.host ?? "localhost";
 const server: Application = createServer();
 const messageBroker = createMessageBrokerFactory();
