@@ -13,6 +13,7 @@ export default tseslint.config(
     },
     rules: {
       '@typescript-eslint/no-misused-promises': 'off',
+      '@typescript-eslint/restrict-template-expressions': 'off',
     },
   },
   {
