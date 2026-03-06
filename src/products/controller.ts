@@ -9,6 +9,7 @@ import { MessageBroker, MessageBrokerEvent } from "@/common/types/broker.js";
 import { ResponseWithMetadata } from "../common/types/index.js";
 import { productQueryValidationSchema } from "./validator.js";
 import { z } from "zod";
+import { MESSAGE_BROKER_TOPIC_EVENTS } from "@/common/lib/constants.js";
 
 class ProductsController {
   constructor(
@@ -43,7 +44,7 @@ class ProductsController {
       }
       const messageBrokerEvent: MessageBrokerEvent = {
         event_id: uuid(),
-        event_type: "product.created",
+        event_type: MESSAGE_BROKER_TOPIC_EVENTS.PRODUCT_CREATED,
         event_version: "1.0",
         occurred_at: new Date().toISOString(),
         producer: {
@@ -54,7 +55,7 @@ class ProductsController {
         data: product,
       };
       await this.messageBroker.sendMessage(
-        "product-topic",
+        "product.events",
         JSON.stringify(messageBrokerEvent),
       );
       this.logger.info(`Product created with id: ${String(product._id)}`);
@@ -162,7 +163,7 @@ class ProductsController {
 
       const messageBrokerEvent: MessageBrokerEvent = {
         event_id: uuid(),
-        event_type: "product.updated",
+        event_type: MESSAGE_BROKER_TOPIC_EVENTS.PRODUCT_UPDATED,
         event_version: "1.0",
         occurred_at: new Date().toISOString(),
         producer: {
@@ -174,7 +175,7 @@ class ProductsController {
       };
 
       await this.messageBroker.sendMessage(
-        "product-topic",
+        "product.events",
         JSON.stringify(messageBrokerEvent),
       );
       const response: ResponseWithMetadata<IProduct> = {
@@ -209,7 +210,7 @@ class ProductsController {
 
       const messageBrokerEvent: MessageBrokerEvent = {
         event_id: uuid(),
-        event_type: "product.deleted",
+        event_type: MESSAGE_BROKER_TOPIC_EVENTS.PRODUCT_DELETED,
         event_version: "1.0",
         occurred_at: new Date().toISOString(),
         producer: {
@@ -221,7 +222,7 @@ class ProductsController {
       };
 
       await this.messageBroker.sendMessage(
-        "product-topic",
+        "product.events",
         JSON.stringify(messageBrokerEvent),
       );
 

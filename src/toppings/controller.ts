@@ -6,7 +6,9 @@ import { ITopping } from "./model.js";
 import { ResponseWithMetadata } from "../common/types/index.js";
 import { toppingQueryValidationSchema } from "./validator.js";
 import { z } from "zod";
-import { MessageBroker } from "@/common/types/broker.js";
+import { MessageBroker, MessageBrokerEvent } from "@/common/types/broker.js";
+import { MESSAGE_BROKER_TOPIC_EVENTS } from "@/common/lib/constants.js";
+import { v4 as uuid } from "uuid";
 
 class ToppingsController {
   constructor(
@@ -38,9 +40,21 @@ class ToppingsController {
         data: { id: String(created._id) },
         success: true,
       };
+      const messageBrokerEvent: MessageBrokerEvent = {
+        event_id: uuid(),
+        event_type: MESSAGE_BROKER_TOPIC_EVENTS.TOPPING_CREATED,
+        event_version: "1.0",
+        occurred_at: new Date().toISOString(),
+        producer: {
+          service: "catalog-service",
+          version: "1.0.0",
+        },
+        partition_key: String(created._id),
+        data: created,
+      };
       await this.messageBroker.sendMessage(
-        "toppings-topic",
-        JSON.stringify(created),
+        "topping.events",
+        JSON.stringify(messageBrokerEvent),
       );
       res.json(response);
       return;
@@ -128,9 +142,22 @@ class ToppingsController {
         updateToppingDto,
       );
       this.logger.info(`Topping with id: ${req.params.id} updated`);
+
+      const messageBrokerEvent: MessageBrokerEvent = {
+        event_id: uuid(),
+        event_type: MESSAGE_BROKER_TOPIC_EVENTS.TOPPING_UPDATED,
+        event_version: "1.0",
+        occurred_at: new Date().toISOString(),
+        producer: {
+          service: "catalog-service",
+          version: "1.0.0",
+        },
+        partition_key: String(req.params.id),
+        data: updated,
+      };
       await this.messageBroker.sendMessage(
-        "toppings-topic",
-        JSON.stringify(updated),
+        "topping.events",
+        JSON.stringify(messageBrokerEvent),
       );
       res.json(updated);
     } catch (error) {
